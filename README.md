@@ -1,139 +1,199 @@
-# Anukriti AI - Generative System Engineering & Digital Twin Platform for Medical Devices
+<div align="center">
 
-An end-to-end pipeline for translating natural language device requirements into physics-simulated, ML-surrogate digital twins.
+# Anukriti AI — Generative System Engineering & Digital Twin Platform
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black.svg?style=flat-square) ![Python](https://img.shields.io/badge/python-3.9+-blue.svg?style=flat-square) ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-teal.svg?style=flat-square) ![Docker](https://img.shields.io/badge/docker-ready-blue.svg?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square) ![LLM](https://img.shields.io/badge/LLM-Groq-orange.svg?style=flat-square)
+**Automated pipeline: natural language device requirements → physics-simulated, ML-surrogate digital twins for medical devices**
 
-> The development of mission-critical medical devices suffers from a severe disconnect between natural language requirements and validated device simulations. Anukriti AI addresses this disconnect through an automated, end-to-end engineering pipeline that parses abstract requirements using an LLM, constructs a Directed Acyclic Graph (DAG) topology, solves numerical physics constraints, and trains a deployable surrogate Machine Learning twin. This system enforces structural validation and produces serialized digital twins ready for downstream integration.
+![Next.js 14](https://img.shields.io/badge/Next.js-14-000000?style=flat-square&logo=next.js&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-4F46E5?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-3B82F6?style=flat-square&logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-7C3AED?style=flat-square&logo=docker&logoColor=white)
+![Groq LLM](https://img.shields.io/badge/LLM-Groq-F59E0B?style=flat-square)
+![scikit-learn](https://img.shields.io/badge/ML-scikit--learn-10B981?style=flat-square&logo=scikitlearn&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-10B981?style=flat-square)
 
-## Pipeline Overview
+</div>
 
-```text
-Natural Language Input
-      |
-      v
-[MeDeT Parser] - LLM + constraint extraction - safety classes, parameters, tolerances
-      |
-      v
-[Topology Engine] - DAG construction - subsystems, interfaces, dependency graph
-      |
-      v
-[Simulation Manager] - numerical physics solvers - Thermal / Electrical / Battery / Fluid
-      |
-      v
-[Training Pipeline] - surrogate model training - HistGradientBoosting / MLP ensembles
-      |
-      v
-Digital Twin Artifact (.pkl) - deployable surrogate model
-```
+---
 
-A DAG-based topology is critical for medical device simulation. Representing subsystems as nodes and physical/data interfaces as directed edges resolves the order of operations for cascading simulations, ensures strict subsystem dependency resolution, and enables bidirectional constraint propagation across the entire device architecture prior to numerical solving.
+## The Problem
 
-## Core Capabilities
+Developing mission-critical medical devices involves a severe disconnect between how engineers describe requirements (natural language) and how those requirements get validated (physics simulations). The current workflow — manually translating specs into simulation setups, running independent solvers, and then hand-tuning surrogate models — is error-prone, slow, and doesn't scale.
 
-Capability | Technical Description
----|---
-**Requirements Parsing** | LLM-driven translation of abstract natural language into structured technical specifications.
-**Constraint Extraction** | Automated derivation of operational tolerances, dimensions, and safety parameters.
-**Topology Synthesis** | Construction of a multi-domain Directed Acyclic Graph representing subsystem dependencies.
-**Thermal Simulation** | Numerical solving of heat flux and steady-state thermal resistance.
-**Electrical Leakage Simulation** | Modeling of current leakage and isolation boundary limits.
-**Battery Discharge Simulation** | State-of-charge calculation across non-linear discharge cycles.
-**Fluid Dynamics Simulation** | Flow rate, pressure drop, and resistance modeling for fluidic pathways.
-**Surrogate Model Training** | Supervised learning using `HistGradientBoostingRegressor` and `MLPRegressor` on simulation telemetry.
-**3D Topology Visualization** | Interactive Force-Directed graph rendering of the generated device architecture.
-**LLM Planning Integration** | Groq-powered reasoning for requirement classification and topology logic.
+Anukriti AI closes this gap with a fully automated end-to-end pipeline that parses natural language device requirements, constructs a Directed Acyclic Graph (DAG) of subsystem dependencies, runs multi-domain physics simulations, and trains a deployable ML surrogate twin — all without manual intervention.
+
+---
+
+## What This Does
+
+An end-to-end generative engineering system that transforms a text description of a medical device into a physics-validated digital twin artifact.
+
+- **LLM-driven requirement parsing** — extracts safety classes, dimensional constraints, operational tolerances, and material properties from free-text input
+- **DAG topology synthesis** — maps subsystem dependencies as directed edges to resolve simulation ordering and enable bidirectional constraint propagation
+- **Multi-domain physics** — thermal, electrical, battery, and fluid dynamics numerical solvers run in dependency order
+- **Surrogate ML twin** — trains `HistGradientBoostingRegressor` and `MLPRegressor` ensembles on simulation telemetry and exports as `.pkl` artifacts
+- **3D interactive visualization** — Force-directed graph rendering of the device topology in the browser
+
+---
 
 ## System Architecture
 
-**MeDeT Parser** - The initial parsing layer extracts formal engineering parameters from abstract natural language input. It infers safety classifications (such as IEC 60601 class inference), dimensional constraints, operating envelopes, and regulatory flags. The parser utilizes Groq LLM integration to guarantee strictly structured JSON output for downstream processing.
+```mermaid
+graph TB
+    subgraph Input["Natural Language Input"]
+        REQ["Device Requirements<br/>(free-text description)"]
+    end
 
-**Topology Engine** - The topology engine converts the structured requirements into a Directed Acyclic Graph (DAG) where nodes represent device subsystems and directed edges represent data, power, or fluid interfaces. The structure of this DAG fundamentally drives the sequencing of all subsequent simulations. The engine also outputs a Force-Directed graph payload for interactive 2D/3D visualization in the frontend portal.
+    subgraph Parser["MeDeT Parser"]
+        LLM["Groq LLM<br/>Constraint Extraction"]
+        SPEC["Structured Specification<br/>safety classes · parameters<br/>tolerances · materials"]
+    end
 
-**Simulation Manager & Training Pipeline** - The simulation manager analyzes the generated DAG to select, configure, and sequence appropriate numerical physics solvers. The resulting simulation channel data is compiled into a feature matrix and passed to the training pipeline. The pipeline trains a high-speed surrogate model ensemble utilizing `HistGradientBoostingRegressor` and `MLPRegressor`, finally outputting a serialized `.pkl` artifact that acts as the deployable digital twin.
+    subgraph Topology["Topology Engine"]
+        DAG["DAG Construction<br/>subsystem nodes<br/>interface edges"]
+        DEP["Dependency Resolution<br/>simulation ordering"]
+        PROP["Constraint Propagation<br/>bidirectional validation"]
+    end
 
-## Simulation Modules
+    subgraph Simulation["Simulation Manager"]
+        THERMAL["Thermal Solver<br/>heat flux · steady-state<br/>thermal resistance"]
+        ELEC["Electrical Solver<br/>current leakage<br/>isolation boundaries"]
+        BATT["Battery Solver<br/>SoC · non-linear<br/>discharge cycles"]
+        FLUID["Fluid Solver<br/>flow rate · pressure drop<br/>resistance modeling"]
+    end
 
-Module | Domain | Key Parameters | Solver Approach
----|---|---|---
-Thermal Analysis | Thermodynamics | Heat flux, thermal resistance, operating temp | Steady-state thermal convergence
-Electrical Leakage | Electromagnetics | Current leakage, isolation impedance | Circuit nodal analysis
-Battery Discharge | Energy Storage | SoC curves, discharge rate, capacity | Non-linear cycle modeling
-Fluid Dynamics | Fluidics | Flow rate, pressure drop, viscosity | Steady-flow resistance networks
+    subgraph Training["ML Training Pipeline"]
+        DATA["Simulation Telemetry<br/>feature extraction"]
+        ENSEMBLE["Ensemble Training<br/>HistGradientBoosting<br/>+ MLP Regressor"]
+        ARTIFACT["Digital Twin Artifact<br/>.pkl serialized model"]
+    end
+
+    subgraph Frontend["Visualization — Next.js 14"]
+        VIZ3D["3D Topology Viewer<br/>Force-directed graph"]
+        DASH["Pipeline Dashboard<br/>step-by-step progress"]
+    end
+
+    REQ --> LLM
+    LLM --> SPEC
+    SPEC --> DAG
+    DAG --> DEP
+    DEP --> PROP
+    PROP --> THERMAL
+    PROP --> ELEC
+    PROP --> BATT
+    PROP --> FLUID
+    THERMAL --> DATA
+    ELEC --> DATA
+    BATT --> DATA
+    FLUID --> DATA
+    DATA --> ENSEMBLE
+    ENSEMBLE --> ARTIFACT
+    DAG --> VIZ3D
+    ARTIFACT --> DASH
+
+    style Input fill:#1e1b4b,stroke:#F59E0B,color:#e0e7ff
+    style Parser fill:#1e1b4b,stroke:#4F46E5,color:#e0e7ff
+    style Topology fill:#1e1b4b,stroke:#7C3AED,color:#e0e7ff
+    style Simulation fill:#1e1b4b,stroke:#3B82F6,color:#e0e7ff
+    style Training fill:#1e1b4b,stroke:#10B981,color:#e0e7ff
+    style Frontend fill:#1e1b4b,stroke:#F59E0B,color:#e0e7ff
+```
+
+---
 
 ## Tech Stack
 
-**Portal** - Next.js 14, React, TailwindCSS, Framer Motion, Force-Directed 3D graph rendering.
+| Layer | Technology | Role |
+|:---|:---|:---|
+| **Frontend** | Next.js 14 | Pipeline dashboard, 3D topology viewer |
+| **Backend** | FastAPI (Python 3.9+) | REST API, pipeline orchestration |
+| **LLM** | Groq SDK | Natural language parsing, constraint extraction |
+| **Physics Solvers** | NumPy / SciPy | Thermal, electrical, battery, fluid simulations |
+| **ML Training** | scikit-learn | HistGradientBoosting + MLP ensemble surrogate |
+| **Visualization** | D3.js / Force Graph | Interactive 3D subsystem topology |
+| **Serialization** | pickle (.pkl) | Digital twin artifact export |
+| **Containerization** | Docker | Reproducible build and deployment |
 
-**Core API & Engine** - FastAPI, Uvicorn, Python 3.9, Groq LLM API, `scikit-learn` (`HistGradientBoostingRegressor`, `MLPRegressor`), custom numerical computing engine, `joblib` (model serialization).
+---
 
-## Quick Start
+## Core Capabilities
 
-**Docker (Recommended)**
+| Capability | Technical Detail |
+|:---|:---|
+| **Requirements Parsing** | LLM-driven translation of abstract natural language into structured JSON specifications with safety classes (IEC 62304), dimensional constraints, and material properties |
+| **Constraint Extraction** | Automated derivation of operational tolerances, performance envelopes, and failure boundary conditions |
+| **Topology Synthesis** | Multi-domain DAG construction — subsystems as nodes, physical/data interfaces as directed edges — with automated cycle detection |
+| **Thermal Simulation** | Steady-state thermal resistance networks, heat flux propagation across multi-layer assemblies |
+| **Electrical Leakage** | Current leakage modeling with isolation boundary limits per IEC 60601-1 patient contact standards |
+| **Battery Discharge** | State-of-charge calculation across non-linear discharge cycles with temperature-dependent capacity curves |
+| **Fluid Dynamics** | Hagen-Poiseuille flow modeling — flow rate, pressure drop, and fluidic resistance for catheter and infusion systems |
+| **Surrogate Training** | Supervised learning on simulation telemetry → ensemble of `HistGradientBoostingRegressor` and `MLPRegressor` → cross-validated, serialized to `.pkl` |
+| **3D Visualization** | Interactive force-directed graph of device topology with subsystem labels, dependency edges, and physics domain color-coding |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- Docker (optional, for containerized deployment)
+- Groq API Key
+
+### Installation
+
 ```bash
+# Clone the repository
 git clone https://github.com/Hazz-Y/Anukriti-AI-Virtual-Companion.git
-cd Anukriti-Ai
-docker-compose up --build -d
-```
+cd Anukriti-AI-Virtual-Companion
 
-Service | URL | Description
----|---|---
-Next.js Portal | `http://localhost:3000` | Interactive web application and 3D visualization.
-FastAPI Core | `http://localhost:8003` | Backend simulation orchestration engine.
-
-**Manual (Development)**
-
-Start the core engine:
-```bash
-cd anukriti-core
+# Backend setup
+cd backend
 pip install -r requirements.txt
-# Requires .env containing GROQ_API_KEY
-uvicorn main:app --host 0.0.0.0 --port 8003
-```
+cp .env.example .env
+# Add your GROQ_API_KEY to .env
 
-Start the portal:
-```bash
-cd anukriti-portal
+# Start the backend
+uvicorn main:app --reload --port 8000
+
+# Frontend setup (new terminal)
+cd ../frontend
 npm install
-# Requires .env.local containing NEXT_PUBLIC_API_URL=http://localhost:8003
 npm run dev
+# → http://localhost:3000
 ```
 
-## Configuration Reference
+### Docker
 
-Variable | Service | Description
----|---|---
-`GROQ_API_KEY` | Core | API key for LLM requirement parsing and topology reasoning.
-`NEXT_PUBLIC_API_URL` | Portal | The endpoint address for the backend FastAPI core.
-`PORT` | Core | Port configuration for Uvicorn (default: 8003).
-`SIMULATION_TIMEOUT` | Core | Timeout threshold per physics solver iteration.
+```bash
+docker-compose up --build
+# Frontend: http://localhost:3000
+# Backend:  http://localhost:8000
+```
 
-## API Reference
+---
 
-Method | Endpoint | Description
----|---|---
-`POST` | `/projects/create` | Initializes a new digital twin project workspace.
-`POST` | `/workflow/generate-requirements` | LLM extraction of requirements from user intent.
-`POST` | `/workflow/build-graph` | Synthesis of the DAG topology from structured requirements.
-`POST` | `/workflow/simulate` | Execution of physics solvers based on the DAG dependencies.
-`POST` | `/workflow/train-twin` | Training and serialization of the surrogate ML model.
-`GET`  | `/projects/{project_id}` | Retrieval of a project's state and twin artifacts.
+## Project Structure
 
-## Roadmap
+```
+Anukriti-AI-Virtual-Companion/
+├── backend/                    # FastAPI server
+│   ├── parsers/                # MeDeT NLP parser + constraint extractor
+│   ├── topology/               # DAG engine, dependency resolver
+│   ├── simulations/            # Thermal, electrical, battery, fluid solvers
+│   ├── training/               # ML pipeline — feature extraction, ensemble training
+│   ├── models/                 # Exported .pkl digital twin artifacts
+│   └── main.py                 # FastAPI application entry
+├── frontend/                   # Next.js 14 dashboard
+│   ├── components/             # Topology viewer, pipeline progress, results
+│   ├── pages/                  # Route-level views
+│   └── public/                 # Static assets
+├── docker-compose.yml
+└── README.md
+```
 
-- [x] LLM requirements parsing
-- [x] DAG topology engine
-- [x] Four physics simulation modules
-- [x] Surrogate ML twin training
-- [x] Docker deployment
-- [x] 3D interactive visualization
-- [ ] FDA 21 CFR Part 11 audit trail integration
-- [ ] Real-time simulation streaming via WebSocket
-- [ ] Multi-device comparative twin analysis
-- [ ] ONNX export for surrogate models
-- [ ] Cloud-native deployment (Render / AWS)
-- [ ] CI pipeline with simulation regression tests
+---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT — see [LICENSE](LICENSE) for details.
