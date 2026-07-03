@@ -6,7 +6,7 @@
 
 <br>
 
-🌐 **[Live Demo Deployment (Vercel)](https://anukriti-ai.vercel.app/)** &nbsp;|&nbsp; 🎬 **[MVP Demo Video (LinkedIn)](https://www.linkedin.com/feed/update/urn:li:activity:7462216246554550272/)**
+🌐 **[Live Demo Deployment (Vercel)](https://anukriti-ai.vercel.app/)** &nbsp;|&nbsp; 🎬 **[MVP Demo Video (YouTube)](https://www.youtube.com/watch?v=YTwPw966v2c)**
 
 <br>
 
@@ -267,9 +267,9 @@ The Anukriti AI demonstration details natural language requirement parsing, mult
 
 <div align="center">
 
-[![Anukriti AI Demo Video](https://img.shields.io/badge/LinkedIn-Video--Presentation-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/feed/update/urn:li:activity:7462216246554550272/)
+[![Anukriti AI Demo Video](https://img.youtube.com/vi/YTwPw966v2c/0.jpg)](https://www.youtube.com/watch?v=YTwPw966v2c)
 
-*▶️ Click to watch the live platform walk-through and MVP demonstration on LinkedIn.*
+*▶️ Click to watch the live platform walk-through and MVP demonstration on YouTube.*
 
 </div>
 
