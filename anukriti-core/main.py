@@ -28,7 +28,7 @@ from core.simulation.manager import SimulationManager
 from core.training.pipeline import TrainingPipeline
 from core.viz.bridge import router as viz_router
 from core.viz.model_generator import DeviceModelGenerator
-
+#new
 def _clean_for_json(obj):
     """Recursively replace NaN/Inf floats with None for JSON-safe serialization."""
     if isinstance(obj, float):

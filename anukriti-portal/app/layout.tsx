@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
+//new
 export const metadata: Metadata = {
   title: "Anukriti AI - Medical Device Digital Twin Platform",
   description: "AI-powered system engineering platform for medical device digital twins. Generate requirements, build architecture, simulate, and train digital twins.",
