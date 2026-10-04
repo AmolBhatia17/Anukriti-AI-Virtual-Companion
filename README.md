@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧠 Anukriti AI — Generative System Engineering & Digital Twin Platform
+## 🧠 Anukriti AI — Generative System Engineering & Digital Twin Platform
 
 ### *Translate Abstract Device Requirements into Physics-Simulated, ML-Surrogate Digital Twins for Medical Devices*
 
