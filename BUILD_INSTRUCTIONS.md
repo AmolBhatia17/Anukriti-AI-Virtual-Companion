@@ -1,4 +1,4 @@
-# Running the Full Anukriti Platform
+### Running the Full Anukriti Platform
 
 ## Architecture
 The platform consists of 4 main services:
